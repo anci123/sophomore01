@@ -38,6 +38,8 @@ int main() {
         case 8:
             pMult(p[choose_ptr(pCount)], p[choose_ptr(pCount)], &p[pCount]);
             break;
+        case 9:
+            pDivid(p[choose_ptr(pCount)], p[choose_ptr(pCount)], &p[pCount], &p[pCount + 1]);
         default:
             break;
         }

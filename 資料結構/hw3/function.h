@@ -16,7 +16,7 @@ void pRemove(polynomial *p);
 void pAdd(polynomial p1, polynomial p2,polynomial *ans);
 void pMinus(polynomial p1, polynomial p2,polynomial *ans);
 void pMult(polynomial p1, polynomial p2,polynomial *ans);
-void pDivid(polynomial p1, polynomial p2,polynomial *ans);
+void pDivid(polynomial p1, polynomial p2,polynomial *quo,polynomial *remain);
 int printMenu(int c);
 int printChoose(int pCount);
 static int (*choose_ptr)(int) = printChoose;

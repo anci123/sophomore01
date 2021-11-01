@@ -49,30 +49,59 @@ void pRemove(polynomial *p) {
     else p->coef[exp] = 0.0;
     output(*p);
 }
-void pAdd(polynomial p1, polynomial p2,polynomial *ans) {
+void pAdd(polynomial p1, polynomial p2, polynomial *ans) {
     init(ans);
     for(int i = 0; i < MAX; ++i) {
         if(p1.coef[i] || p2.coef[i]) ans->coef[i] = p1.coef[i] + p2.coef[i];
     }
     output(*ans);
 }
-void pMinus(polynomial p1, polynomial p2,polynomial *ans) {
+void pMinus(polynomial p1, polynomial p2, polynomial *ans) {
     init(ans);
     for(int i = 0; i < MAX; ++i) {
         if(p1.coef[i] || p2.coef[i]) ans->coef[i] = p2.coef[i] - p1.coef[i];
     }
     output(*ans);
 }
-void pMult(polynomial p1, polynomial p2,polynomial *ans) {
+void pMult(polynomial p1, polynomial p2, polynomial *ans) {
     init(ans);
-    for(int i=0;i<MAX;++i){
-        for(int j=0;j<=i;++j){
-            if(p1.coef[j] && p2.coef[i-j]) ans->coef[i]=p1.coef[j]*p2.coef[i-j];
+    for(int i = 0; i < MAX; ++i) {
+        for(int j = 0; j <= i; ++j) {
+            if(p1.coef[j] && p2.coef[i - j]) ans->coef[i] = p1.coef[j] * p2.coef[i - j];
         }
     }
     output(*ans);
 }
-void pDivid(polynomial p1, polynomial p2,polynomial *ans) {
+int highest_degree(polynomial p) {
+    int i = MAX - 1;
+    for(i; i >= 0; --i) {
+        if(p.coef[i] != 0) break;
+    }
+    return i;
+}
+void pDivid(polynomial p1, polynomial p2, polynomial *quo, polynomial *remain) {
+    cout << "建立商式" << endl;
+    init(quo);
+    cout << "建立餘式" << endl;
+    init(remain);
+    swap(p1, p2);
+    int h1 = highest_degree(p1), h2 = highest_degree(p2);
+    if(h1 < h2) for(int i = 0; i <= h1; ++i) remain->coef[i] = p2.coef[i];
+    else {
+        polynomial temp = p1;
+        while(h1 >= h2) {
+            float coQ = temp.coef[h1] / p2.coef[h2];
+            polynomial t;
+            for(int i = 0; i <= h2; ++i) t.coef[h1 - h2 + i] = p2.coef[i] * coQ;
+            for(int i = 0; i <= h1; ++i) temp.coef[i] = temp.coef[i] - t.coef[i];
+            quo->coef[h1 - h2] = coQ;
+            h1 = highest_degree(temp);
+        }
+        for(int i = 0; i < MAX; ++i)remain->coef[i] = temp.coef[i];
+    }
+    cout << endl;
+    output(*quo);
+    output(*remain);
 }
 int printMenu(int c) {
     int choose;
