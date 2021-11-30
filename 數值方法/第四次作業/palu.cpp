@@ -5,7 +5,7 @@ int main() {
     vector<vector<double>> L(m, vector<double>(n, 0)), U(m, vector<double>(n, 0)), P(m, vector<double>(n, 0)), matrix(m, vector<double>(n, 0));
     for(int i = 0; i < m; ++i) for(int j = 0; j < n; ++j) cin >> matrix[i][j];
     vector<double> x(m);
-    for(int i = 0; i < m; ++i) cin >> x[i];
+    //for(int i = 0; i < m; ++i) cin >> x[i];
     for(int i = 0; i < n; ++i) P[i][i] = 1;
     double multi = 0;
     for(int i = 0; i < n; ++i) {
