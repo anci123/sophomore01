@@ -1,0 +1,6 @@
+C:\irvine\examples\Project32_VS2019\Debug\Project.exe
+C:\irvine\examples\Project32_VS2019\Debug\Project.pdb
+C:\大二上\組合語言\mid\Debug\Project.exe
+C:\大二上\組合語言\mid\Debug\Project.pdb
+C:\大二上\組合語言\practice\Debug\Project.exe
+C:\大二上\組合語言\practice\Debug\Project.pdb
