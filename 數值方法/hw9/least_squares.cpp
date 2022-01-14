@@ -5,7 +5,7 @@ vector<vector<double>> matrix(4, vector<double>(4, 0));
 vector<double> x(4, 0);
 void palu();
 int main() {
-    int n = 12;
+    int n = 4;
     vector<double> t(n, 0), y(n, 0);
     vector<vector<double>> A(n, vector<double>(4, 0)), AT(4, vector<double>(n, 0));
     for(int i = 0; i < n; ++i) {
@@ -13,16 +13,16 @@ int main() {
         cin >> y[i];;
     }
     for(int i = 0; i < n; ++i) {
-        A[i][0] = 1;
-        A[i][1] = cos(2 * PI * t[i]);
-        A[i][2] = sin(2 * PI * t[i]);
-        A[i][3] = cos(4 * PI * t[i]);
+        A[i][0] = t[i];
+        A[i][1] = 1;
+        //A[i][2] = sin(2 * PI * t[i]);
+        //A[i][3] = cos(4 * PI * t[i]);
         AT[0][i] = A[i][0];
         AT[1][i] = A[i][1];
-        AT[2][i] = A[i][2];
-        AT[3][i] = A[i][3];
+        //AT[2][i] = A[i][2];
+        //AT[3][i] = A[i][3];
     }
-    for(int i = 0; i < 4; ++i) {
+    for(int i = 0; i < 2; ++i) {
         double sumT = 0;
         for(int j = 0; j < n; ++j) {
             double sum = 0;
@@ -40,7 +40,7 @@ int main() {
     return 0;
 }
 void palu() {
-    int m = 4, n = 4;
+    int m = 2, n = 2;
     vector<vector<double>> L(m, vector<double>(n, 0)), U(m, vector<double>(n, 0)), P(m, vector<double>(n, 0));
     for(int i = 0; i < n; ++i) P[i][i] = 1;
     double multi = 0;
