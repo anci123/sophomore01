@@ -71,36 +71,12 @@ int main(void) {
 		if(go){//x(k+1) = xk+s
 			for(int32_t i = 0;i<3;i++){
 				xk[i] = xk[i]+s[i];
-				//printf("%lf  ", xk[i]);
 			}
-		}/*
-		if(tmp<10){//中間紀錄
-			printf("U:\n");
-			for(int32_t i = 0;i<3;i++){
-					for(int32_t j = 0;j<3;j++){
-						printf("%lf ",Df[i][j]);
-					}
-					printf("\n");
-			}
-			printf("F():\n");
-			for(int32_t i = 0;i<3;i++){
-				printf("%lf ", F[i]);
-			}printf("\n");
-			printf("s:\n");
-			for(int32_t i = 0;i<3;i++){
-				printf("%lf ", s[i]);
-			}printf("\n");
-			printf("xk:\n");
-			for(int32_t i = 0;i<3;i++){
-				printf("%lf ", xk[i]);
-			}printf("\n\n");
 		}
-		//printf("\n\n");
-		tmp++;*/
 	}
 	
 
-	for(int32_t i =0;i<3;i++){//印出答案
+	for(int32_t i =0;i<3;i++){
 		printf("u%d: %.4lf \n", i+1, xk[i]);
 	}
 	
