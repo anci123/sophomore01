@@ -5,16 +5,18 @@ INCLUDE Irvine32.inc
 arr1 sdword 10000 dup(0)
 arr2 sdword 10000 dup(0)
 arr3 sdword 10000 dup(0)
-Str1 byte "Please input the number of row:",0
-Str2 byte "Please input the number of column:",0
+Str1 byte "Please input the number of column:",0
+Str2 byte "Please input the number of row:",0
 Str3 byte "Please input an array:",0
 Str4 byte "Array 1: ",0
 Str5 byte "Array 2: ",0
-Str6 byte "Sum offset arrays",0
+Str6 byte "Product offset arrays",0
 row byte 0
 col byte 0
 total byte 0
 cnt byte 0
+tmp SDWORD 0
+tr byte 0
 .code
 main PROC
 	mov edx,OFFSET Str1
@@ -41,9 +43,17 @@ home:
 	cmp bl,0
 	je P
 	dec bl
+
+	mov edx,OFFSET Str1
+	call WRITESTRING
+	call READINT
+	mov edx,OFFSET Str2
+	call WRITESTRING
+	call READINT
 	mov edx,OFFSET Str3
 	call WRITESTRING
 	call crlf
+
 	mov esi,offset arr2
 	mov cl,total
 	jmp L1
@@ -95,8 +105,8 @@ C1:
 	jmp home2
 
 A:	
-	mov esi, offset arr3
-	mov edi, offset arr1
+	mov esi, offset arr1
+	mov edi, offset arr2
 	mov bl,row
 	call crlf
 	mov edx,OFFSET Str6
@@ -107,17 +117,27 @@ R2:
 	dec bl
 	mov cl,col
 	cmp bl,0
+	mov dl,row
+	mov tr,dl
+	jae R3
+R3:
+	mov tmp,0
+	dec tr
+	mov cl,col
+	cmp tr,0
 	jae C2
+	jmp R2
 
 C2: 
 	mov eax,0
-	mov eax,[edi]
-	add eax,[edi+40000]
-	mov [esi],eax
 	mov eax,[esi]
+	mov edx,[edi]
+	mul edx
+	add tmp,eax
+	mov eax,tmp
 	call WRITEINT
 	add esi,4
-	add edi,4
+	add edi,40000
 	mov al,' '
 	call WRITECHAR
 	loop C2

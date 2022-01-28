@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.28.29337.0	    11/18/21 14:53:41
+Microsoft (R) Macro Assembler Version 14.28.29337.0	    01/28/22 00:16:22
 2019_p4.asm						     Page 1 - 1
 
 
@@ -20,48 +20,167 @@ Microsoft (R) Macro Assembler Version 14.28.29337.0	    11/18/21 14:53:41
 			      C .NOLIST
 			      C .LIST
 			      C 
-				ExitProcess PROTO,dwExitCode:DWORD
 
  00000000			.data
- 00000000 00000001		b SDWORD 1,2,3,4,10,20,30,40,50,60,70,80 
-	   00000002
-	   00000003
-	   00000004
-	   0000000A
-	   00000014
-	   0000001E
-	   00000028
-	   00000032
-	   0000003C
-	   00000046
-	   00000050
- 00000030 0000000A		num SDWORD 10
 
+ 00000000  00002710 [		arr1 sdword 10000 dup(0)
+	    00000000
+	   ]
+ 00009C40  00002710 [		arr2 sdword 10000 dup(0)
+	    00000000
+	   ]
+ 00013880  00002710 [		arr3 sdword 10000 dup(0)
+	    00000000
+	   ]
+ 0001D4C0 50 6C 65 61 73	Str1 byte "Please input the number of column:",0
+	   65 20 69 6E 70
+	   75 74 20 74 68
+	   65 20 6E 75 6D
+	   62 65 72 20 6F
+	   66 20 63 6F 6C
+	   75 6D 6E 3A 00
+ 0001D4E3 50 6C 65 61 73	Str2 byte "Please input the number of row:",0
+	   65 20 69 6E 70
+	   75 74 20 74 68
+	   65 20 6E 75 6D
+	   62 65 72 20 6F
+	   66 20 72 6F 77
+	   3A 00
+ 0001D503 50 6C 65 61 73	Str3 byte "Please input an array:",0
+	   65 20 69 6E 70
+	   75 74 20 61 6E
+	   20 61 72 72 61
+	   79 3A 00
+ 0001D51A 41 72 72 61 79	Str4 byte "Array 1: ",0
+	   20 31 3A 20 00
+ 0001D524 41 72 72 61 79	Str5 byte "Array 2: ",0
+	   20 32 3A 20 00
+ 0001D52E 53 75 6D 20 6F	Str6 byte "Sum offset arrays",0
+	   66 66 73 65 74
+	   20 61 72 72 61
+	   79 73 00
+ 0001D540 00			row byte 0
+ 0001D541 00			col byte 0
+ 0001D542 00			total byte 0
+ 0001D543 00			cnt byte 0
  00000000			.code
-
  00000000			main PROC
- 00000000  BE 00000000 R		mov esi,OFFSET b
- 00000005  8B 0D 00000030 R		mov ecx,num
- 0000000B  E8 00000007			call prp
+ 00000000  BA 0001D4C0 R		mov edx,OFFSET Str1
+ 00000005  E8 00000000 E		call WRITESTRING
+ 0000000A  E8 00000000 E		call READINT
+ 0000000F  A2 0001D540 R		mov row,al
+ 00000014  BA 0001D4E3 R		mov edx,OFFSET Str2
+ 00000019  E8 00000000 E		call WRITESTRING
+ 0000001E  E8 00000000 E		call READINT
+ 00000023  A2 0001D541 R		mov col,al
+ 00000028  BA 0001D503 R		mov edx,OFFSET Str3
+ 0000002D  E8 00000000 E		call WRITESTRING
+ 00000032  E8 00000000 E		call crlf
+ 00000037  A0 0001D541 R		mov al,col
+ 0000003C  8A 1D 0001D540 R		mov bl,row
+ 00000042  F6 E3			mul bl
+ 00000044  B9 00000000			mov ecx,0
+ 00000049  A2 0001D542 R		mov total,al
+ 0000004E  8A 0D 0001D542 R		mov cl,total
+ 00000054  BE 00000000 R		mov esi,offset arr1
+ 00000059  B3 01			mov bl,1
+ 0000005B  EB 23			jmp L1
+ 0000005D			home:
+ 0000005D  80 FB 00			cmp bl,0
+ 00000060  74 38			je P
+ 00000062  FE CB			dec bl
+ 00000064  BA 0001D503 R		mov edx,OFFSET Str3
+ 00000069  E8 00000000 E		call WRITESTRING
+ 0000006E  E8 00000000 E		call crlf
+ 00000073  BE 00009C40 R		mov esi,offset arr2
+ 00000078  8A 0D 0001D542 R		mov cl,total
+ 0000007E  EB 00			jmp L1
+
+
+ 00000080			L1:
+ 00000080  B8 00000000			mov eax,0
+ 00000085  E8 00000000 E		call READINT
+ 0000008A  89 06			mov [esi],eax
+ 0000008C  8B 06			mov eax,[esi]
+ 0000008E  83 C6 04			add esi,4
+ 00000091  FE C9			dec cl
+ 00000093  80 F9 00			cmp cl,0
+ 00000096  74 C5			je home
+ 00000098  EB E6			jmp L1
+ 0000009A			P:	
+ 0000009A  C6 05 0001D543 R		mov cnt,1
+	   01
+ 000000A1  BE 00000000 R		mov esi, offset arr1
+ 000000A6  8A 1D 0001D540 R		mov bl,row
+ 000000AC  BA 0001D51A R		mov edx,OFFSET Str4
+ 000000B1  E8 00000000 E		call WRITESTRING
+ 000000B6  EB 2B			jmp R1
+ 000000B8			home2:
+ 000000B8  E8 00000000 E	call crlf
+ 000000BD  80 3D 0001D543 R		cmp cnt,0
+	   00
+ 000000C4  74 49			je A
+ 000000C6  FE 0D 0001D543 R		dec cnt
+ 000000CC  BE 00009C40 R		mov esi,offset arr2
+ 000000D1  8A 1D 0001D540 R		mov bl,row
+ 000000D7  BA 0001D524 R		mov edx,OFFSET Str5
+ 000000DC  E8 00000000 E		call WRITESTRING
+ 000000E1  EB 00			jmp R1
+ 000000E3			R1:
+ 000000E3  E8 00000000 E		call crlf
+ 000000E8  FE CB			dec bl
+ 000000EA  8A 0D 0001D541 R		mov cl,col
+ 000000F0  80 FB 00			cmp bl,0
+ 000000F3  73 00			jae C1
+
+ 000000F5			C1: 
+ 000000F5  8B 06			mov eax,[esi]
+ 000000F7  E8 00000000 E		call WRITEINT
+ 000000FC  83 C6 04			add esi,4
+ 000000FF  B0 20			mov al,' '
+ 00000101  E8 00000000 E		call WRITECHAR
+ 00000106  E2 ED			loop C1
+ 00000108  80 FB 00			cmp bl,0
+ 0000010B  77 D6			ja R1
+ 0000010D  EB A9			jmp home2
+
+ 0000010F			A:	
+ 0000010F  BE 00013880 R		mov esi, offset arr3
+ 00000114  BF 00000000 R		mov edi, offset arr1
+ 00000119  8A 1D 0001D540 R		mov bl,row
+ 0000011F  E8 00000000 E		call crlf
+ 00000124  BA 0001D52E R		mov edx,OFFSET Str6
+ 00000129  E8 00000000 E		call WRITESTRING
+ 0000012E  EB 00			jmp R2
+ 00000130			R2:
+ 00000130  E8 00000000 E		call crlf
+ 00000135  FE CB			dec bl
+ 00000137  8A 0D 0001D541 R		mov cl,col
+ 0000013D  80 FB 00			cmp bl,0
+ 00000140  73 00			jae C2
+
+ 00000142			C2: 
+ 00000142  B8 00000000			mov eax,0
+ 00000147  8B 07			mov eax,[edi]
+ 00000149  03 87 00009C40		add eax,[edi+40000]
+ 0000014F  89 06			mov [esi],eax
+ 00000151  8B 06			mov eax,[esi]
+ 00000153  E8 00000000 E		call WRITEINT
+ 00000158  83 C6 04			add esi,4
+ 0000015B  83 C7 04			add edi,4
+ 0000015E  B0 20			mov al,' '
+ 00000160  E8 00000000 E		call WRITECHAR
+ 00000165  E2 DB			loop C2
+ 00000167  80 FB 00			cmp bl,0
+ 0000016A  77 C4			ja R2
+
 					INVOKE ExitProcess,0
- 00000010  6A 00	   *	    push   +000000000h
- 00000012  E8 00000000 E   *	    call   ExitProcess
- 00000017			main ENDP
- 00000017			prp PROC
- 00000017			L1:
- 00000017  8B 1E			mov ebx,[esi]
- 00000019  43				inc ebx
- 0000001A  89 1E			mov [esi],ebx
- 0000001C  8B 06			mov eax,[esi]
- 0000001E  E8 00000000 E		CALL WRITEDEC
- 00000023  E8 00000000 E		call crlf
- 00000028  83 C6 04			add esi,4
- 0000002B  E2 EA			loop L1
- 0000002D			prp ENDP
+ 0000016C  6A 00	   *	    push   +000000000h
+ 0000016E  E8 00000000 E   *	    call   ExitProcess
+
+ 00000173			main ENDP
 				END main
-
-
-Microsoft (R) Macro Assembler Version 14.28.29337.0	    11/18/21 14:53:41
+Microsoft (R) Macro Assembler Version 14.28.29337.0	    01/28/22 00:16:22
 2019_p4.asm						     Symbols 2 - 1
 
 
@@ -155,8 +274,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000034 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000002D Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0001D544 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000173 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -263,10 +382,17 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000017 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000173 Public STDCALL
+  home . . . . . . . . . . . . .	L Near	 0000005D _TEXT	
+  L1 . . . . . . . . . . . . . .	L Near	 00000080 _TEXT	
+  P  . . . . . . . . . . . . . .	L Near	 0000009A _TEXT	
+  home2  . . . . . . . . . . . .	L Near	 000000B8 _TEXT	
+  R1 . . . . . . . . . . . . . .	L Near	 000000E3 _TEXT	
+  C1 . . . . . . . . . . . . . .	L Near	 000000F5 _TEXT	
+  A  . . . . . . . . . . . . . .	L Near	 0000010F _TEXT	
+  R2 . . . . . . . . . . . . . .	L Near	 00000130 _TEXT	
+  C2 . . . . . . . . . . . . . .	L Near	 00000142 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-prp  . . . . . . . . . . . . . .	P Near	 00000017 _TEXT	Length= 00000016 Public STDCALL
-  L1 . . . . . . . . . . . . . .	L Near	 00000017 _TEXT	
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
@@ -400,6 +526,12 @@ STD_ERROR_HANDLE . . . . . . . .	Number	 -0000000Ch
 STD_INPUT_HANDLE . . . . . . . .	Number	 -0000000Ah   
 STD_OUTPUT_HANDLE  . . . . . . .	Number	 -0000000Bh   
 SetConsoleTitle  . . . . . . . .	Text   	 SetConsoleTitleA
+Str1 . . . . . . . . . . . . . .	Byte	 0001D4C0 _DATA	
+Str2 . . . . . . . . . . . . . .	Byte	 0001D4E3 _DATA	
+Str3 . . . . . . . . . . . . . .	Byte	 0001D503 _DATA	
+Str4 . . . . . . . . . . . . . .	Byte	 0001D51A _DATA	
+Str5 . . . . . . . . . . . . . .	Byte	 0001D524 _DATA	
+Str6 . . . . . . . . . . . . . .	Byte	 0001D52E _DATA	
 TAB  . . . . . . . . . . . . . .	Number	 00000009h   
 TRUE . . . . . . . . . . . . . .	Number	 00000001h   
 TRUNCATE_EXISTING  . . . . . . .	Number	 00000005h   
@@ -484,10 +616,14 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+arr1 . . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+arr2 . . . . . . . . . . . . . .	DWord	 00009C40 _DATA	
+arr3 . . . . . . . . . . . . . .	DWord	 00013880 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
-b  . . . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+cnt  . . . . . . . . . . . . . .	Byte	 0001D543 _DATA	
+col  . . . . . . . . . . . . . .	Byte	 0001D541 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
@@ -499,8 +635,9 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-num  . . . . . . . . . . . . . .	DWord	 00000030 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+row  . . . . . . . . . . . . . .	Byte	 0001D540 _DATA	
+total  . . . . . . . . . . . . .	Byte	 0001D542 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
